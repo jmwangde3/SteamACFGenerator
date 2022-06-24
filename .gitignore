@@ -1,0 +1,14 @@
+# Steam .acf Generator
+/build/release
+/build/resources/resource_hacker/ResourceHacker.ini
+
+# Yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+/node_modules

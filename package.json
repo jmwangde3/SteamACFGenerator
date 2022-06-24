@@ -1,0 +1,53 @@
+{
+  "name": "steam-acf-generator",
+  "version": "1.0.0",
+  "description": "Steam .acf Generator",
+  "year": "2022",
+  "copyright": "Copyright © 2022 Sak32009",
+  "homepage": "https://github.com/Sak32009/SteamACFGenerator/",
+  "bugs": {
+    "url": "https://github.com/Sak32009/SteamACFGenerator/issues/"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Sak32009",
+    "url": "https://sak32009.github.io/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sak32009/SteamACFGenerator.git"
+  },
+  "engines": {
+    "node": ">=v16.15.1"
+  },
+  "bin": "./src/main.js",
+  "private": true,
+  "pkg": {
+    "targets": [
+      "node16-win-x64"
+    ],
+    "outputPath": "./build/release"
+  },
+  "scripts": {
+    "build": "yarn pkg .",
+    "lint": "yarn eslint . --ext .js"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "@types/node": "^16.11.41",
+    "@types/yargs": "^17.0.10",
+    "eslint": "^8.18.0",
+    "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=87db841d8c78fba9b3bcd64e85be985daa3ce870",
+    "pkg": "^5.7.0",
+    "prettier": "^2.7.1",
+    "rcedit": "^3.0.1",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "fs-extra": "^10.1.0",
+    "winston": "^3.8.0",
+    "yargs": "^17.5.1"
+  },
+  "packageManager": "yarn@3.2.1"
+}
