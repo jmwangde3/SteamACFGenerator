@@ -114,15 +114,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@malept/cross-spawn-promise@npm:^1.1.0":
-  version: 1.1.1
-  resolution: "@malept/cross-spawn-promise@npm:1.1.1"
-  dependencies:
-    cross-spawn: ^7.0.1
-  checksum: 1aa468f9ff3aa59dbaa720731ddf9c1928228b6844358d8821b86628953e0608420e88c6366d85af35acad73b1addaa472026a1836ad3fec34813eb38b2bd25a
-  languageName: node
-  linkType: hard
-
 "@mdn/browser-compat-data@npm:^3.3.14":
   version: 3.3.14
   resolution: "@mdn/browser-compat-data@npm:3.3.14"
@@ -783,14 +774,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-spawn-windows-exe@npm:^1.1.0":
-  version: 1.2.0
-  resolution: "cross-spawn-windows-exe@npm:1.2.0"
+"cross-env@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "cross-env@npm:7.0.3"
   dependencies:
-    "@malept/cross-spawn-promise": ^1.1.0
-    is-wsl: ^2.2.0
-    which: ^2.0.2
-  checksum: 57662e8fb24b53f39330aa405e5bbce874dc5cc61fcf212031def1c6fbb1aa62f5635dcacb942d6165e97460984c16b0a57ee223b4c8492f4b92147c77bc573f
+    cross-spawn: ^7.0.1
+  bin:
+    cross-env: src/bin/cross-env.js
+    cross-env-shell: src/bin/cross-env-shell.js
+  checksum: 26f2f3ea2ab32617f57effb70d329c2070d2f5630adc800985d8b30b56e8bf7f5f439dd3a0358b79cee6f930afc23cf8e23515f17ccfb30092c6b62c6b630a79
   languageName: node
   linkType: hard
 
@@ -2029,15 +2021,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-docker@npm:^2.0.0":
-  version: 2.2.1
-  resolution: "is-docker@npm:2.2.1"
-  bin:
-    is-docker: cli.js
-  checksum: 3fef7ddbf0be25958e8991ad941901bf5922ab2753c46980b60b05c1bf9c9c2402d35e6dc32e4380b980ef5e1970a5d9d5e5aa2e02d77727c3b6b5e918474c56
-  languageName: node
-  linkType: hard
-
 "is-extglob@npm:^2.1.1":
   version: 2.1.1
   resolution: "is-extglob@npm:2.1.1"
@@ -2143,15 +2126,6 @@ __metadata:
   dependencies:
     call-bind: ^1.0.2
   checksum: 95bd9a57cdcb58c63b1c401c60a474b0f45b94719c30f548c891860f051bc2231575c290a6b420c6bc6e7ed99459d424c652bd5bf9a1d5259505dc35b4bf83de
-  languageName: node
-  linkType: hard
-
-"is-wsl@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "is-wsl@npm:2.2.0"
-  dependencies:
-    is-docker: ^2.0.0
-  checksum: 20849846ae414997d290b75e16868e5261e86ff5047f104027026fd61d8b5a9b0b3ade16239f35e1a067b3c7cc02f70183cb661010ed16f4b6c7c93dad1b19d8
   languageName: node
   linkType: hard
 
@@ -2773,7 +2747,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pkg-fetch@npm:3.4.1":
+"pkg-fetch@npm:3.4.1, pkg-fetch@npm:^3.4.1":
   version: 3.4.1
   resolution: "pkg-fetch@npm:3.4.1"
   dependencies:
@@ -2931,15 +2905,6 @@ __metadata:
   bin:
     rc: ./cli.js
   checksum: 2e26e052f8be2abd64e6d1dabfbd7be03f80ec18ccbc49562d31f617d0015fbdbcf0f9eed30346ea6ab789e0fdfe4337f033f8016efdbee0df5354751842080e
-  languageName: node
-  linkType: hard
-
-"rcedit@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "rcedit@npm:3.0.1"
-  dependencies:
-    cross-spawn-windows-exe: ^1.1.0
-  checksum: 73332443aa9e5c70bcd4e8a2f5195f5591a03ef08bf1fe477c116f2525e0d525ced0ad5c32c23dcadc27550aec297559e1f944676f833d25d549c7d27b95e165
   languageName: node
   linkType: hard
 
@@ -3316,12 +3281,13 @@ __metadata:
     "@types/node": ^16.11.41
     "@types/yargs": ^17.0.10
     axios: ^0.27.2
+    cross-env: ^7.0.3
     eslint: ^8.18.0
     eslint-config-sak32009: "https://github.com/Sak32009/eslint-config-sak32009.git#commit=87db841d8c78fba9b3bcd64e85be985daa3ce870"
     fs-extra: ^10.1.0
     pkg: ^5.7.0
+    pkg-fetch: ^3.4.1
     prettier: ^2.7.1
-    rcedit: ^3.0.1
     typescript: ^4.7.4
     winston: ^3.8.0
     yargs: ^17.5.1
@@ -3721,7 +3687,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"which@npm:^2.0.1, which@npm:^2.0.2":
+"which@npm:^2.0.1":
   version: 2.0.2
   resolution: "which@npm:2.0.2"
   dependencies:

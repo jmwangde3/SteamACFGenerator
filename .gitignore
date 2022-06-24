@@ -1,6 +1,8 @@
 # Steam .acf Generator
 /build/release
-/build/resources/resource_hacker/ResourceHacker.ini
+/build/.pkg-cache
+/build/resources/VersionInfo.res
+/build/ResourceHacker/ResourceHacker.ini
 
 # Yarn
 .pnp.*

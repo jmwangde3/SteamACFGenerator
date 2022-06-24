@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /* eslint-disable sonarjs/cognitive-complexity */
-const fs = require('node:fs/promises');
+const { writeFile } = require('node:fs/promises');
 const util = require('node:util');
 const process = require('node:process');
 const { join } = require('node:path');
-const fsExtra = require('fs-extra');
+const { ensureDir } = require('fs-extra');
 const { transports, format, createLogger } = require('winston');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
@@ -150,8 +150,8 @@ yargs(hideBin(process.argv))
             }
 
             const appManifestAppIdFilePath = join(appSteamAppsRootPath, `appmanifest_${appId}.acf`);
-            await fsExtra.ensureDir(appSteamAppsRootPath);
-            await fs.writeFile(
+            await ensureDir(appSteamAppsRootPath);
+            await writeFile(
               appManifestAppIdFilePath,
               `"AppState"
 {

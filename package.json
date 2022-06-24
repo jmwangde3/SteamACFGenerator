@@ -18,29 +18,24 @@
     "url": "https://github.com/Sak32009/SteamACFGenerator.git"
   },
   "engines": {
-    "node": ">=v16.15.1"
+    "node": "v16.15.0"
   },
   "bin": "./src/main.js",
   "private": true,
-  "pkg": {
-    "targets": [
-      "node16-win-x64"
-    ],
-    "outputPath": "./build/release"
-  },
   "scripts": {
-    "build": "yarn pkg .",
+    "build": "yarn cross-env PKG_CACHE_PATH=./build/.pkg-cache PKG_IGNORE_TAG=true node ./src/build.js",
     "lint": "yarn eslint . --ext .js"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^16.11.41",
     "@types/yargs": "^17.0.10",
+    "cross-env": "^7.0.3",
     "eslint": "^8.18.0",
     "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=87db841d8c78fba9b3bcd64e85be985daa3ce870",
     "pkg": "^5.7.0",
+    "pkg-fetch": "^3.4.1",
     "prettier": "^2.7.1",
-    "rcedit": "^3.0.1",
     "typescript": "^4.7.4"
   },
   "dependencies": {
