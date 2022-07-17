@@ -1,59 +1,18 @@
 #!/usr/bin/env node
-/* eslint-disable sonarjs/cognitive-complexity */
-const { writeFile } = require('node:fs/promises');
 const util = require('node:util');
 const process = require('node:process');
-const { join } = require('node:path');
-const { ensureDir } = require('fs-extra');
-const { transports, format, createLogger } = require('winston');
+const path = require('node:path');
+const fsExtra = require('fs-extra');
 const yargs = require('yargs/yargs');
-const { hideBin } = require('yargs/helpers');
-const axios = require('axios').default;
-const { name: appName } = require('../package.json');
+const yargsHelpers = require('yargs/helpers');
+const vdf = require('vdf-parser');
+const appInfo = require('../package.json');
+const logger = require('./logger.js');
+const isNumeric = require('./is-numeric.js');
+const steamCMDGetData = require('./steamcmd.js');
 
-const appRootPath = process.cwd();
-const appLoggerFilePath = join(appRootPath, `${appName}.log`);
-const appSteamAppsRootPath = join(appRootPath, 'steamapps');
-
-/**
- * isNumeric
- * @param txt {string}
- * */
-const isNumeric = (txt) => {
-  if (typeof txt !== 'string') {
-    return false;
-  }
-  return !Number.isNaN(txt) && !Number.isNaN(Number.parseFloat(txt));
-};
-
-// LOGGER
-const loggerFormatString = format.printf(({ level, timestamp, message }) => `[${timestamp}] [${level}]: ${message}`);
-const loggerFormatTimestamp = 'YYYY-MM-DD hh:mm:ss.SSS';
-const logger = createLogger({
-  level: 'silly',
-  format: format.combine(format.timestamp({ format: loggerFormatTimestamp }), loggerFormatString),
-  transports: [
-    new transports.File({
-      filename: appLoggerFilePath,
-      maxFiles: 5,
-      // 5mb
-      maxsize: 5_242_880,
-      tailable: true,
-      format: format.combine(format.timestamp({ format: loggerFormatTimestamp }), loggerFormatString),
-    }),
-    new transports.Console({
-      format: format.combine(
-        format.colorize(),
-        format.timestamp({ format: loggerFormatTimestamp }),
-        loggerFormatString
-      ),
-    }),
-  ],
-});
-
-// THE BEST PART
-yargs(hideBin(process.argv))
-  .usage('./$0 - follow the instructions below')
+yargs(yargsHelpers.hideBin(process.argv))
+  .usage(`./$0 - v${appInfo.version} - follow the instructions below`)
   .example('./$0 --appids 601150', 'this is an example for single appId')
   .example('./$0 --appids 601150 1593500', 'this is an example for multiple appIds')
   .option('appids', {
@@ -64,26 +23,32 @@ yargs(hideBin(process.argv))
   })
   .strict()
   .parseAsync()
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   .then(async (argv) => {
     const appIds = argv.appids;
     if (appIds.length > 0) {
       for (const appId of appIds) {
         if (isNumeric(appId)) {
           logger.info(`Trying to get data of ${appId}...`);
-
-          const url = `https://api.steamcmd.net/v1/info/${appId}`;
-          const response = await axios.get(url);
-          const responseData = response.data;
-
-          if (responseData.status === 'success') {
-            const data = responseData.data[appId];
+          /**
+           * @type Record<string, any> | string
+           */
+          const steamCMDData = await steamCMDGetData(appId);
+          if (typeof steamCMDData !== 'string') {
+            const data = steamCMDData[appId];
 
             const appName = data.common.name;
             const appInstallDirectory = data.config.installdir;
             const appBuildId = data.depots.branches.public.buildid;
             const appBaseLanguages = data.depots.baselanguages;
-            const appInstalledDepots = [];
-            const appSharedDepots = [];
+            /**
+             * @type Record<string, any>
+             */
+            const appInstalledDepots = {};
+            /**
+             * @type Record<string, any>
+             */
+            const appSharedDepots = {};
             let appSize;
 
             logger.debug(util.format('appName', appName));
@@ -124,19 +89,24 @@ yargs(hideBin(process.argv))
                     // ONLY WINDOWS
                     if (typeof depotOs === 'undefined' || depotOs === 'windows') {
                       if (typeof depotIsSharedInstall !== 'undefined') {
-                        appSharedDepots.push(`"${depotId}"  "${depotIsSharedInstall}"`);
+                        appSharedDepots[depotId] = depotIsSharedInstall;
                         // NOTE: i noticed that it is always the first depot that contains the game size but I have to skip the sharedinstalls
                       } else if (typeof appSize === 'undefined') {
                         appSize = depotSize;
                         logger.debug(util.format('appSize', appSize, '(it is normal if it is displayed after!)'));
                       }
 
-                      appInstalledDepots.push(`"${depotId}"
-    {
-      "manifest"  "${depotManifestId}"
-      "size"      "${depotSize}"
-      ${typeof depotIsDlc !== 'undefined' ? `"dlcappid"  "${depotIsDlc}"` : ''}
-    }`);
+                      appInstalledDepots[depotId] =
+                        typeof depotIsDlc !== 'undefined'
+                          ? {
+                              manifest: depotManifestId,
+                              size: depotSize,
+                              dlcappid: depotIsDlc,
+                            }
+                          : {
+                              manifest: depotManifestId,
+                              size: depotSize,
+                            };
                     } else {
                       logger.info(`${depotId} it is not a valid depot for Windows OS.`);
                     }
@@ -149,64 +119,58 @@ yargs(hideBin(process.argv))
               }
             }
 
-            const appManifestAppIdFilePath = join(appSteamAppsRootPath, `appmanifest_${appId}.acf`);
-            await ensureDir(appSteamAppsRootPath);
-            await writeFile(
-              appManifestAppIdFilePath,
-              `"AppState"
-{
-  "appid"                             "${appId}"
-  "Universe"                          "1"
-  "LauncherPath"                      ""
-  "name"                              "${appName}"
-  "StateFlags"                        "4"
-  "installdir"                        "${appInstallDirectory}"
-  "LastUpdated"                       "0"
-  "SizeOnDisk"                        "${appSize}"
-  "StagingSize"                       "0"
-  "buildid"                           "${appBuildId}"
-  "LastOwner"                         "2009"
-  "UpdateResult"                      "0"
-  "BytesToDownload"                   "0"
-  "BytesDownloaded"                   "0"
-  "BytesToStage"                      "0"
-  "BytesStaged"                       "0"
-  "TargetBuildID"                     "0"
-  "AutoUpdateBehavior"                "0"
-  "AllowOtherDownloadsWhileRunning"   "0"
-  "ScheduledAutoUpdate"               "0"
-  ${
-    typeof appBaseLanguages !== 'undefined'
-      ? `
-  "UserConfig"
-  {
-    "language"  "${appBaseLanguages}"
-  }`
-      : ''
-  }
-  ${
-    appInstalledDepots.length > 0
-      ? `
-  "InstalledDepots"
-  {
-    ${appInstalledDepots.join('\n    ')}
-  }`
-      : ''
-  }
-  ${
-    appSharedDepots.length > 0
-      ? `
-  "SharedDepots"
-  {
-    ${appSharedDepots.join('\n    ')}
-  }`
-      : ''
-  }
-}`
-            );
+            const appSteamAppsRootPath = path.join(process.cwd(), 'steamapps');
+            const appManifestAppIdFilePath = path.join(appSteamAppsRootPath, `appmanifest_${appId}.acf`);
+            await fsExtra.ensureDir(appSteamAppsRootPath);
+
+            /**
+             * @type Record<string, any>
+             */
+            const appVdf = {
+              AppState: {
+                appid: appId,
+                Universe: 1,
+                LauncherPath: '',
+                name: appName,
+                StateFlags: 4,
+                installdir: appInstallDirectory,
+                LastUpdated: 0,
+                SizeOnDisk: appSize,
+                StagingSize: 0,
+                buildid: appBuildId,
+                LastOwner: 2009,
+                UpdateResult: 0,
+                BytesToDownload: 0,
+                BytesDownloaded: 0,
+                BytesToStage: 0,
+                BytesStaged: 0,
+                TargetBuildID: 0,
+                AutoUpdateBehavior: 0,
+                AllowOtherDownloadsWhileRunning: 0,
+                ScheduledAutoUpdate: 0,
+                UserConfig: {},
+                InstalledDepots: {},
+                SharedDepots: {},
+              },
+            };
+
+            if (typeof appBaseLanguages !== 'undefined') {
+              appVdf.AppState.UserConfig.language = appBaseLanguages;
+            }
+
+            if (Object.keys(appInstalledDepots).length > 0) {
+              appVdf.AppState.InstalledDepots = appInstalledDepots;
+            }
+
+            if (Object.keys(appSharedDepots).length > 0) {
+              appVdf.AppState.SharedDepots = appSharedDepots;
+            }
+
+            await fsExtra.writeFile(appManifestAppIdFilePath, vdf.stringify(appVdf, { pretty: true, indent: '  ' }));
             logger.info(`${appManifestAppIdFilePath} was written successfully!`);
           } else {
-            logger.error(`Response from API: ${responseData.data}`);
+            logger.error(`Unknown error from SteamCMD!`);
+            logger.error(steamCMDData);
           }
         } else {
           logger.error(`The appId "${appId}" is invalid!`);
@@ -216,4 +180,4 @@ yargs(hideBin(process.argv))
       throw new Error('You have not entered any appid!');
     }
   })
-  .catch((error) => logger.error(error));
+  .catch((error) => logger.error(util.format(error)));

@@ -1,7 +1,4 @@
 {
   "root": true,
-  "extends": ["sak32009"],
-  "rules": {
-    "no-console": 0
-  }
+  "extends": ["sak32009"]
 }

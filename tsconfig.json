@@ -3,28 +3,35 @@
     "module": "ESNext",
     "target": "ESNext",
     "strict": true,
-    "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "alwaysStrict": true,
+    "moduleResolution": "node",
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
     "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    /*"noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true,*/
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "importsNotUsedAsValues": "error",
-    "useDefineForClassFields": true,
-    "isolatedModules": true,
-    "resolveJsonModule": true,
+    /*
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
     "checkJs": true,
-    "outDir": "./build/tsc",
-    "typeRoots": ["./@types/**/*", "./node_modules/@types"]
+    */
+
+    /* VITE */
+    "isolatedModules": true,
+    "useDefineForClassFields": true,
+
+    /* CUSTOM */
+    "allowJs": true,
+    "checkJs": true,
+    "outDir": "./src/build/tsc",
+    "resolveJsonModule": true
   },
-  "includes": ["./src/**/*"]
+  "includes": ["./src/*"],
+  "exclude": ["./github", "./.yarn", "./node_modules", "./src/build"]
 }

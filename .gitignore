@@ -1,8 +1,10 @@
 # Steam .acf Generator
-/build/release
 /build/.pkg-cache
-/build/resources/VersionInfo.res
-/build/ResourceHacker/ResourceHacker.ini
+/build/bin/steamcmd/*
+!/build/bin/steamcmd/steamcmd.exe
+/build/release
+/steamapps
+/steam-acf-generator.log
 
 # Yarn
 .pnp.*
