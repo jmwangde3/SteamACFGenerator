@@ -1,15 +1,17 @@
-#!/usr/bin/env node
-const util = require('node:util');
-const process = require('node:process');
-const path = require('node:path');
-const fsExtra = require('fs-extra');
-const yargs = require('yargs/yargs');
-const yargsHelpers = require('yargs/helpers');
-const vdf = require('vdf-parser');
-const appInfo = require('../package.json');
-const logger = require('./logger.js');
-const isNumeric = require('./is-numeric.js');
-const steamCMDGetData = require('./steamcmd.js');
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import util from 'node:util';
+import process from 'node:process';
+import path from 'node:path';
+import fsExtra from 'fs-extra';
+import yargs from 'yargs/yargs';
+import yargsHelpers from 'yargs/helpers';
+import vdf from 'vdf-parser';
+import logger from '../common/logger';
+import appInfo from '../../package.json';
+import { appSteamAppsRootPath } from '../common/paths';
+import isNumeric from './is-numeric';
+import SteamCMD from './steamcmd';
 
 yargs(yargsHelpers.hideBin(process.argv))
   .usage(`./$0 - v${appInfo.version} - follow the instructions below`)
@@ -21,6 +23,7 @@ yargs(yargsHelpers.hideBin(process.argv))
     describe: 'You can set a single appId or multiple appIds',
     demandOption: true,
   })
+  .version(appInfo.version)
   .strict()
   .parseAsync()
   // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -29,11 +32,8 @@ yargs(yargsHelpers.hideBin(process.argv))
     if (appIds.length > 0) {
       for (const appId of appIds) {
         if (isNumeric(appId)) {
-          logger.info(`Trying to get data of ${appId}...`);
-          /**
-           * @type Record<string, any> | string
-           */
-          const steamCMDData = await steamCMDGetData(appId);
+          logger.info(`Trying to get data of ${appId}... DO NOT PANIC IF IT LOOKS STUCK`);
+          const steamCMDData = await SteamCMD.getData(appId);
           if (typeof steamCMDData !== 'string') {
             const data = steamCMDData[appId];
 
@@ -41,14 +41,8 @@ yargs(yargsHelpers.hideBin(process.argv))
             const appInstallDirectory = data.config.installdir;
             const appBuildId = data.depots.branches.public.buildid;
             const appBaseLanguages = data.depots.baselanguages;
-            /**
-             * @type Record<string, any>
-             */
-            const appInstalledDepots = {};
-            /**
-             * @type Record<string, any>
-             */
-            const appSharedDepots = {};
+            const appInstalledDepots = {} as Record<string, unknown>;
+            const appSharedDepots = {} as Record<string, unknown>;
             let appSize;
 
             logger.debug(util.format('appName', appName));
@@ -58,6 +52,7 @@ yargs(yargsHelpers.hideBin(process.argv))
 
             const dataDepots = data.depots;
             for (const depotId in dataDepots) {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
               if (Object.hasOwn(dataDepots, depotId)) {
                 if (isNumeric(depotId)) {
                   const depotData = dataDepots[depotId];
@@ -119,14 +114,8 @@ yargs(yargsHelpers.hideBin(process.argv))
               }
             }
 
-            const appSteamAppsRootPath = path.join(process.cwd(), 'steamapps');
             const appManifestAppIdFilePath = path.join(appSteamAppsRootPath, `appmanifest_${appId}.acf`);
-            await fsExtra.ensureDir(appSteamAppsRootPath);
-
-            /**
-             * @type Record<string, any>
-             */
-            const appVdf = {
+            const appManifestOutput: SteamCMDAcf = {
               AppState: {
                 appid: appId,
                 Universe: 1,
@@ -155,18 +144,21 @@ yargs(yargsHelpers.hideBin(process.argv))
             };
 
             if (typeof appBaseLanguages !== 'undefined') {
-              appVdf.AppState.UserConfig.language = appBaseLanguages;
+              appManifestOutput.AppState.UserConfig.language = appBaseLanguages;
             }
 
             if (Object.keys(appInstalledDepots).length > 0) {
-              appVdf.AppState.InstalledDepots = appInstalledDepots;
+              appManifestOutput.AppState.InstalledDepots = appInstalledDepots;
             }
 
             if (Object.keys(appSharedDepots).length > 0) {
-              appVdf.AppState.SharedDepots = appSharedDepots;
+              appManifestOutput.AppState.SharedDepots = appSharedDepots;
             }
 
-            await fsExtra.writeFile(appManifestAppIdFilePath, vdf.stringify(appVdf, { pretty: true, indent: '  ' }));
+            await fsExtra.outputFile(
+              appManifestAppIdFilePath,
+              vdf.stringify(appManifestOutput, { pretty: true, indent: '    ' })
+            );
             logger.info(`${appManifestAppIdFilePath} was written successfully!`);
           } else {
             logger.error(`Unknown error from SteamCMD!`);
@@ -180,4 +172,5 @@ yargs(yargsHelpers.hideBin(process.argv))
       throw new Error('You have not entered any appid!');
     }
   })
+  // eslint-disable-next-line unicorn/prefer-top-level-await
   .catch((error) => logger.error(util.format(error)));

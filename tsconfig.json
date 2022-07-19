@@ -27,11 +27,8 @@
     "useDefineForClassFields": true,
 
     /* CUSTOM */
-    "allowJs": true,
-    "checkJs": true,
-    "outDir": "./src/build/tsc",
     "resolveJsonModule": true
   },
-  "includes": ["./src/*"],
-  "exclude": ["./github", "./.yarn", "./node_modules", "./src/build"]
+  "includes": ["./src/**/*"],
+  "exclude": ["./github", "./.yarn", "./build", "./node_modules"]
 }

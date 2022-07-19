@@ -1,11 +1,11 @@
-const path = require('node:path');
-const process = require('node:process');
-const winston = require('winston');
-const appInfo = require('../package.json');
+import path from 'node:path';
+import * as winston from 'winston';
+import appInfo from '../../package.json';
+import { appLoggerRootPath } from './paths';
 
-const loggerFilePath = path.join(process.cwd(), `${appInfo.name}.log`);
+const loggerFilePath = path.join(appLoggerRootPath, `${appInfo.name}.log`);
 const loggerFormatString = winston.format.printf(
-  ({ level, timestamp, message }) => `[${timestamp}] [${level}]: ${message}`
+  ({ level, timestamp, message }) => `[${timestamp as string}] [${level}]: ${message as string}`
 );
 const loggerFormatTimestamp = 'YYYY-MM-DD hh:mm:ss.SSS';
 const logger = winston.createLogger({
@@ -29,4 +29,4 @@ const logger = winston.createLogger({
   ],
 });
 
-module.exports = logger;
+export default logger;

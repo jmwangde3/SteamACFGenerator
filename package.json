@@ -1,6 +1,6 @@
 {
   "name": "steam-acf-generator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Steam .acf Generator",
   "copyright": "Copyright © 2022 Sak32009",
   "homepage": "https://github.com/Sak32009/SteamACFGenerator/",
@@ -21,9 +21,11 @@
   ],
   "private": true,
   "scripts": {
-    "test": "node ./src/main.js --appids 252490 271590 1120320 954740",
-    "build": "yarn cross-env PKG_CACHE_PATH=./build/.pkg-cache PKG_IGNORE_TAG=true node ./src/build.js",
-    "lint": "yarn eslint ."
+    "test": "yarn run build:main && node ./build/dist/main.js --appids 252490 271590 1120320 954740",
+    "release": "yarn run build:build && yarn run build:main && yarn cross-env PKG_CACHE_PATH=./build/.pkg-cache PKG_IGNORE_TAG=true node ./build/dist/build.js",
+    "lint": "yarn tsc --noEmit && yarn eslint .",
+    "build:build": "yarn vite build -c ./src/build/vite.config.ts",
+    "build:main": "yarn vite build -c ./src/main/vite.config.ts"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.0",
@@ -33,12 +35,13 @@
     "adm-zip": "^0.5.9",
     "cross-env": "^7.0.3",
     "eslint": "^8.20.0",
-    "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=87db841d8c78fba9b3bcd64e85be985daa3ce870",
+    "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=fd390502f5d71069e7cd7289d52a7e3410e7e477",
     "pkg": "^5.8.0",
     "pkg-fetch": "^3.4.2",
     "prettier": "^2.7.1",
     "rcedit": "^3.0.1",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "vite": "^3.0.2"
   },
   "dependencies": {
     "fs-extra": "^10.1.0",
