@@ -35,7 +35,7 @@
     "adm-zip": "^0.5.9",
     "cross-env": "^7.0.3",
     "eslint": "^8.20.0",
-    "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=fd390502f5d71069e7cd7289d52a7e3410e7e477",
+    "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=ce5f60bfdf46f3f2b6be4d04f55178dc48767c67",
     "pkg": "^5.8.0",
     "pkg-fetch": "^3.4.2",
     "prettier": "^2.7.1",

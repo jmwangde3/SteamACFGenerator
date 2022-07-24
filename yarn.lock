@@ -341,7 +341,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^5.30.6":
+"@typescript-eslint/eslint-plugin@npm:^5.30.7":
   version: 5.30.7
   resolution: "@typescript-eslint/eslint-plugin@npm:5.30.7"
   dependencies:
@@ -364,7 +364,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^5.30.6":
+"@typescript-eslint/parser@npm:^5.30.7":
   version: 5.30.7
   resolution: "@typescript-eslint/parser@npm:5.30.7"
   dependencies:
@@ -1510,15 +1510,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-sak32009@https://github.com/Sak32009/eslint-config-sak32009.git#commit=fd390502f5d71069e7cd7289d52a7e3410e7e477":
-  version: 1.0.5
-  resolution: "eslint-config-sak32009@https://github.com/Sak32009/eslint-config-sak32009.git#commit=fd390502f5d71069e7cd7289d52a7e3410e7e477"
+"eslint-config-sak32009@https://github.com/Sak32009/eslint-config-sak32009.git#commit=ce5f60bfdf46f3f2b6be4d04f55178dc48767c67":
+  version: 1.0.6
+  resolution: "eslint-config-sak32009@https://github.com/Sak32009/eslint-config-sak32009.git#commit=ce5f60bfdf46f3f2b6be4d04f55178dc48767c67"
   dependencies:
-    "@typescript-eslint/eslint-plugin": ^5.30.6
-    "@typescript-eslint/parser": ^5.30.6
+    "@typescript-eslint/eslint-plugin": ^5.30.7
+    "@typescript-eslint/parser": ^5.30.7
     eslint-config-prettier: ^8.5.0
     eslint-define-config: ^1.5.1
-    eslint-import-resolver-typescript: ^3.2.7
+    eslint-import-resolver-typescript: ^3.3.0
     eslint-plugin-compat: ^4.0.2
     eslint-plugin-eslint-comments: ^3.2.0
     eslint-plugin-import: ^2.26.0
@@ -1526,13 +1526,13 @@ __metadata:
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-promise: ^6.0.0
     eslint-plugin-regexp: ^1.7.0
-    eslint-plugin-sonarjs: ^0.13.0
-    eslint-plugin-unicorn: ^43.0.1
+    eslint-plugin-sonarjs: ^0.14.0
+    eslint-plugin-unicorn: ^43.0.2
   peerDependencies:
     eslint: ^8.20.0
     prettier: ^2.7.1
     typescript: ^4.7.4
-  checksum: 50861f6838e185a6b1ea72df8010ee9f1f5155b5a678d6bee34b6840e30a2cf335eb29b6055d28215c4f6c65a35cccf75d44fdac21d9ca8993972bbcd413160d
+  checksum: 76e31c81fdfcfd884d88367095c0833bce66d0d8ea0df97836090b106bcbe1ff2c7abb311282c3ba0f4123453c8bef77bd83ff783f392cca85d56a170a00f369
   languageName: node
   linkType: hard
 
@@ -1553,9 +1553,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-import-resolver-typescript@npm:^3.2.7":
-  version: 3.2.7
-  resolution: "eslint-import-resolver-typescript@npm:3.2.7"
+"eslint-import-resolver-typescript@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "eslint-import-resolver-typescript@npm:3.3.0"
   dependencies:
     debug: ^4.3.4
     enhanced-resolve: ^5.10.0
@@ -1567,7 +1567,7 @@ __metadata:
   peerDependencies:
     eslint: "*"
     eslint-plugin-import: "*"
-  checksum: 7f63d58182b77adac3f2cbc4ac5dcd487a5b9acf125ff59d1731dd0e74ffbad7fdbb9ac71c893963e84255cd4d5ff6a6ef3078e5b9ed180c713a2fa82797a51f
+  checksum: c5ccb5c15dbf7a7cddcb5daca9d7a412d523f8009a82e5869ef131f3e8717d501fddd1707528f516d9e54aef2936ea2d1e0f39ae7bfc62efa35ed7e329590c05
   languageName: node
   linkType: hard
 
@@ -1706,16 +1706,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-sonarjs@npm:^0.13.0":
-  version: 0.13.0
-  resolution: "eslint-plugin-sonarjs@npm:0.13.0"
+"eslint-plugin-sonarjs@npm:^0.14.0":
+  version: 0.14.0
+  resolution: "eslint-plugin-sonarjs@npm:0.14.0"
   peerDependencies:
     eslint: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
-  checksum: f1cbb33b010c663150c3866e5fdbad2398658e279405d863f48da98edb0438b0ea68732e263f5c939d3d6f2d9a785f80c10234c1b229873b6ee44c24fd6e0cd1
+  checksum: 5a6d20d985ce3d0e776d04815e305822dc866040903a4b8796011c4d1e8e8ccebe8904c6807596c5cc69ce898098956ce48f5a7bc47ad4ea7290e6845f7b3b1f
   languageName: node
   linkType: hard
 
-"eslint-plugin-unicorn@npm:^43.0.1":
+"eslint-plugin-unicorn@npm:^43.0.2":
   version: 43.0.2
   resolution: "eslint-plugin-unicorn@npm:43.0.2"
   dependencies:
@@ -4185,7 +4185,7 @@ __metadata:
     adm-zip: ^0.5.9
     cross-env: ^7.0.3
     eslint: ^8.20.0
-    eslint-config-sak32009: "https://github.com/Sak32009/eslint-config-sak32009.git#commit=fd390502f5d71069e7cd7289d52a7e3410e7e477"
+    eslint-config-sak32009: "https://github.com/Sak32009/eslint-config-sak32009.git#commit=ce5f60bfdf46f3f2b6be4d04f55178dc48767c67"
     fs-extra: ^10.1.0
     pkg: ^5.8.0
     pkg-fetch: ^3.4.2
