@@ -12,7 +12,7 @@
 
 #### Screenshots
 
-<img src="https://raw.githubusercontent.com/Sak32009/SteamACFGenerator/main/docs/screenshots/screenshot_main.png" alt="screenshot-main" width="300">
+<img src="https://raw.githubusercontent.com/Sak32009/SteamACFGenerator/main/docs/screenshots/screenshot_main.png" alt="screenshot-main" width="600">
 
 ## Usage
 
