@@ -1,6 +1,6 @@
 {
   "name": "steam-acf-generator",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Steam .acf Generator is a CLI application for Windows that can generate the appmanifest_APPID.acf for Steam Games.",
   "copyright": "Copyright © 2022 Sak32009",
   "homepage": "https://github.com/Sak32009/SteamACFGenerator/",
