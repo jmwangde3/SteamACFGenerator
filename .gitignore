@@ -1,4 +1,4 @@
-# Steam .acf Generator
+# SteamACFGenerator
 /build/.pkg-cache
 /build/bin/steamcmd/*
 !/build/bin/steamcmd/steamcmd.exe
