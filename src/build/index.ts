@@ -1,5 +1,4 @@
 /* eslint-disable unicorn/prevent-abbreviations */
-import util from 'node:util';
 import path from 'node:path';
 import pkg from 'pkg';
 import pkgFetch from 'pkg-fetch';
@@ -71,4 +70,4 @@ downloadPkgOriginalPrecompiledBinaries()
     logger.info('Done');
   })
   // eslint-disable-next-line unicorn/prefer-top-level-await
-  .catch((error) => logger.error(util.format(error)));
+  .catch((error) => logger.error(error));

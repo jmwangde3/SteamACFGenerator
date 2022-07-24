@@ -1,4 +1,5 @@
 import path from 'node:path';
+import util from 'node:util';
 import * as winston from 'winston';
 import appInfo from '../../package.json';
 import { appLoggerRootPath } from './paths';
@@ -29,4 +30,10 @@ const logger = winston.createLogger({
   ],
 });
 
-export default logger;
+const c = {
+  info: (...data: unknown[]) => logger.info(util.format(...data)),
+  debug: (...data: unknown[]) => logger.debug(util.format(...data)),
+  error: (...data: unknown[]) => logger.debug(util.format(...data)),
+};
+
+export default c;

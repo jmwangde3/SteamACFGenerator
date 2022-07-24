@@ -14,14 +14,8 @@ export const appSteamAppsRootPath = appIsPackaged
   ? path.join(appRootPath, 'data', 'steamapps')
   : path.join(appRootPath, 'build', 'data', 'steamapps');
 
-export const appReleaseRootPath = path.join(appRootPath, 'build', 'release', appInfo.version);
-export const appReleaseFilePath = path.join(
-  appRootPath,
-  'build',
-  'release',
-  appInfo.version,
-  `${appInfo.name}-v${appInfo.version}.zip`
-);
+export const appReleaseRootPath = path.join(appRootPath, 'build', 'release');
+export const appReleaseFilePath = path.join(appRootPath, 'build', 'release', `${appInfo.name}.zip`);
 
 export const steamCMDFilePath = path.join(appRootPath, 'build', 'bin', 'steamcmd', 'SteamCMD.exe');
 export const steamCMDToFilePath = path.join(appReleaseRootPath, 'steamcmd', `steamcmd.exe`);

@@ -1,7 +1,7 @@
 {
   "name": "steam-acf-generator",
-  "version": "1.0.2",
-  "description": "Steam .acf Generator",
+  "version": "1.0.3",
+  "description": "Steam .acf Generator is a CLI application for Windows that can generate the appmanifest_APPID.acf for Steam Games.",
   "copyright": "Copyright © 2022 Sak32009",
   "homepage": "https://github.com/Sak32009/SteamACFGenerator/",
   "bugs": "https://github.com/Sak32009/SteamACFGenerator/issues/",
@@ -21,8 +21,8 @@
   ],
   "private": true,
   "scripts": {
-    "test": "yarn run build:main && node ./build/dist/main.js --appids 252490 271590 1120320 954740",
-    "release": "yarn run build:build && yarn run build:main && yarn cross-env PKG_CACHE_PATH=./build/.pkg-cache PKG_IGNORE_TAG=true node ./build/dist/build.js",
+    "test": "yarn run build:main && node ./build/dist/main.js --appids 203160 252490 271590 1120320 954740 530070 215280",
+    "build": "yarn run build:build && yarn run build:main && yarn cross-env PKG_CACHE_PATH=./build/.pkg-cache PKG_IGNORE_TAG=true node ./build/dist/build.js",
     "lint": "yarn tsc --noEmit && yarn eslint .",
     "build:build": "yarn vite build -c ./src/build/vite.config.ts",
     "build:main": "yarn vite build -c ./src/main/vite.config.ts"
@@ -49,5 +49,5 @@
     "winston": "^3.8.1",
     "yargs": "^17.5.1"
   },
-  "packageManager": "yarn@3.2.1"
+  "packageManager": "yarn@3.2.2"
 }
