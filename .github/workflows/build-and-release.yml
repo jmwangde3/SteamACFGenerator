@@ -33,7 +33,7 @@ jobs:
           yarn run release
 
       - name: Action / Release
-      - uses: ncipollo/release-action@v1.10.0
+        uses: ncipollo/release-action@v1.10.0
         with:
           token: ${{ secrets.YOUR_GITHUB_TOKEN }}
           draft: true
