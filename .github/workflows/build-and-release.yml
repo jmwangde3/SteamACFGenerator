@@ -36,7 +36,7 @@ jobs:
       - name: Action / Release
         uses: ncipollo/release-action@v1.10.0
         with:
-          token: ${{ secrets.YOUR_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
           generateReleaseNotes: true
           artifacts: 'build/release/steam-acf-generator.zip'
