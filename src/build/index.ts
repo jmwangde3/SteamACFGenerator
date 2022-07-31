@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/prevent-abbreviations */
-import path from 'node:path';
-import pkg from 'pkg';
-import pkgFetch from 'pkg-fetch';
+import { basename, dirname } from 'node:path';
+import { exec as pkgExec } from 'pkg';
+import { need as pkgNeed } from 'pkg-fetch';
 import fsExtra from 'fs-extra';
 import rcedit from 'rcedit';
 import AdmZip from 'adm-zip';
@@ -12,18 +12,16 @@ import {
   pkgNodeVersion,
   pkgOriginalPrecompiledBinariesFilePath,
   pkgInputFilePath,
-  steamCMDFilePath,
-  steamCMDToFilePath,
   pkgOutputFilePath,
-  appReleaseFilePath,
   appReleaseRootPath,
+  appReleaseFilePath,
 } from '../common/paths.js';
 import appInfo from '../../package.json';
 
 const downloadPkgOriginalPrecompiledBinaries = async () => {
   logger.info('Download PKG Precompiled Binaries');
   if (!(await fsExtra.pathExists(pkgCustomizedPrecompiledBinariesFilePath))) {
-    await pkgFetch.need({ nodeRange: `node${pkgNodeVersion}`, platform: 'win', arch: 'x64' });
+    await pkgNeed({ nodeRange: `node${pkgNodeVersion}`, platform: 'win', arch: 'x64' });
     await fsExtra.rename(pkgOriginalPrecompiledBinariesFilePath, pkgCustomizedPrecompiledBinariesFilePath);
   }
 };
@@ -37,8 +35,8 @@ const customizePkgInfoPrecompiledBinaries = async () => {
     'version-string': {
       CompanyName: appInfo.author,
       FileDescription: appInfo.description,
-      InternalFilename: path.basename(pkgOutputFilePath),
-      OriginalFilename: path.basename(pkgOutputFilePath),
+      InternalFilename: basename(pkgOutputFilePath),
+      OriginalFilename: basename(pkgOutputFilePath),
       LegalCopyright: appInfo.copyright,
       ProductName: appInfo.name,
     },
@@ -46,12 +44,8 @@ const customizePkgInfoPrecompiledBinaries = async () => {
 };
 
 const buildCustomizedExecutables = async () => {
-  await fsExtra.emptyDir(path.dirname(pkgOutputFilePath));
-  await pkg.exec([pkgInputFilePath, '-C', 'Brotli', '-t', 'win', '-d', '-o', pkgOutputFilePath]);
-};
-
-const copySteamCMDToRelease = async () => {
-  await fsExtra.copy(steamCMDFilePath, steamCMDToFilePath);
+  await fsExtra.emptyDir(dirname(pkgOutputFilePath));
+  await pkgExec([pkgInputFilePath, '-C', 'Brotli', '-t', 'win', '-d', '-o', pkgOutputFilePath]);
 };
 
 const zipFiles = () => {
@@ -64,7 +58,6 @@ const zipFiles = () => {
 downloadPkgOriginalPrecompiledBinaries()
   .then(customizePkgInfoPrecompiledBinaries)
   .then(buildCustomizedExecutables)
-  .then(copySteamCMDToRelease)
   .then(zipFiles)
   .then(() => {
     logger.info('Done');

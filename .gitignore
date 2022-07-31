@@ -1,12 +1,8 @@
 # SteamACFGenerator
 /build/.pkg-cache
-/build/bin/steamcmd/*
-!/build/bin/steamcmd/steamcmd.exe
-/build/data
 /build/dist
 /build/release
-/steamapps
-/steam-acf-generator.log
+/debug
 
 # Yarn
 .pnp.*

@@ -1,43 +1,36 @@
 import process from 'node:process';
-import path from 'node:path';
-import appInfo from '../../package.json';
+import { join } from 'node:path';
+import { engines, name } from '../../package.json';
 
 const appIsPackaged = typeof (process as unknown as Record<string, unknown>).pkg !== 'undefined';
 
 export const appRootPath = process.cwd();
-export const appIconFilePath = path.join(appRootPath, 'build', 'resources', 'icon.ico');
+export const appIconFilePath = join(appRootPath, 'build', 'resources', 'icon.ico');
 
-export const appLoggerRootPath = appIsPackaged
-  ? path.join(appRootPath, 'data', 'logs')
-  : path.join(appRootPath, 'build', 'data', 'logs');
+export const appReleaseRootPath = join(appRootPath, 'build', 'release');
+export const appReleaseFilePath = join(appRootPath, 'build', 'release', `${name}.zip`);
+
+export const appLoggerRootPath = appIsPackaged ? appRootPath : join(appRootPath, 'debug');
 export const appSteamAppsRootPath = appIsPackaged
-  ? path.join(appRootPath, 'data', 'steamapps')
-  : path.join(appRootPath, 'build', 'data', 'steamapps');
+  ? join(appRootPath, 'steamapps')
+  : join(appRootPath, 'debug', 'steamapps');
 
-export const appReleaseRootPath = path.join(appRootPath, 'build', 'release');
-export const appReleaseFilePath = path.join(appRootPath, 'build', 'release', `${appInfo.name}.zip`);
-
-export const steamCMDFilePath = path.join(appRootPath, 'build', 'bin', 'steamcmd', 'SteamCMD.exe');
-export const steamCMDToFilePath = path.join(appReleaseRootPath, 'steamcmd', `steamcmd.exe`);
-export const steamCMDExeFilePath = appIsPackaged
-  ? path.join(appRootPath, 'steamcmd', `steamcmd.exe`)
-  : path.join(appRootPath, 'build', 'bin', 'steamcmd', 'steamcmd.exe');
-export const steamCMDRootPath = path.dirname(steamCMDExeFilePath);
-export const steamCMDStdoutRootPath = appIsPackaged
-  ? path.join(appRootPath, 'data', 'steamcmd_stdout')
-  : path.join(appRootPath, 'build', 'data', 'steamcmd_stdout');
+export const appSteamCMDRootPath = appIsPackaged
+  ? join(appRootPath, 'steamcmd')
+  : join(appRootPath, 'debug', 'steamcmd');
+export const appSteamCMDInstalledRootPath = join(appSteamCMDRootPath, 'installed');
+export const appSteamCMDExeFilePath = join(appSteamCMDInstalledRootPath, 'steamcmd.exe');
+export const appSteamCMDDownloadsRootPath = join(appSteamCMDRootPath, 'downloads');
 
 // eslint-disable-next-line unicorn/prevent-abbreviations
-export const pkgCacheRootPath = path.join(appRootPath, 'build', '.pkg-cache');
+export const pkgCacheRootPath = join(appRootPath, 'build', '.pkg-cache');
 // eslint-disable-next-line unicorn/prevent-abbreviations
-export const pkgInputFilePath = path.join(appRootPath, 'build', 'dist', 'main.js');
+export const pkgInputFilePath = join(appRootPath, 'build', 'dist', 'main.js');
 // eslint-disable-next-line unicorn/prevent-abbreviations
-export const pkgOutputFilePath = path.join(appReleaseRootPath, `${appInfo.name}.exe`);
+export const pkgOutputFilePath = join(appReleaseRootPath, `${name}.exe`);
 // eslint-disable-next-line unicorn/prevent-abbreviations
-export const pkgNodeVersion = appInfo.engines.node.slice(1);
+export const pkgNodeVersion = engines.node.slice(1);
 // eslint-disable-next-line unicorn/prevent-abbreviations
-export const pkgOriginalPrecompiledBinariesFilePath = path.join(pkgCacheRootPath, `fetched-v${pkgNodeVersion}-win-x64`);
+export const pkgOriginalPrecompiledBinariesFilePath = join(pkgCacheRootPath, `fetched-v${pkgNodeVersion}-win-x64`);
 // eslint-disable-next-line unicorn/prevent-abbreviations
-export const pkgCustomizedPrecompiledBinariesFilePath = path.join(pkgCacheRootPath, `built-v${pkgNodeVersion}-win-x64`);
-
-export default {};
+export const pkgCustomizedPrecompiledBinariesFilePath = join(pkgCacheRootPath, `built-v${pkgNodeVersion}-win-x64`);
