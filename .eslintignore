@@ -2,4 +2,5 @@
 /.yarn
 /build
 /debug
+/docs
 /node_modules

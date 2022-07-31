@@ -30,5 +30,5 @@
     "resolveJsonModule": true
   },
   "includes": ["./src/**/*"],
-  "exclude": ["./github", "./.yarn", "./build", "./node_modules"]
+  "exclude": ["./github", "./.yarn", "./build", "./debug", "./docs", "./node_modules"]
 }
