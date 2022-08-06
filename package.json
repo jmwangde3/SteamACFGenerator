@@ -1,6 +1,6 @@
 {
   "name": "steam-acf-generator",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Steam .acf Generator is a CLI application for Windows that can generate the appmanifest_APPID.acf for Steam Games.",
   "homepage": "https://github.com/Sak32009/SteamACFGenerator/",
   "bugs": "https://github.com/Sak32009/SteamACFGenerator/issues/",
@@ -40,15 +40,15 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "@sak32009/prettierconfig": "https://github.com/sak32009/prettierconfig.git#commit=e2e7d3f7210840eeee140bbeaadcb632841fe19d",
-    "@sak32009/tsconfig": "https://github.com/sak32009/tsconfig.git#commit=a835c0f656e18c31124e023d81b94ae2153d3197",
+    "@sak32009/prettierconfig": "https://github.com/sak32009/prettierconfig.git#commit=cac596834ecf7424048b0a0e620ba5ac19cf6da3",
+    "@sak32009/tsconfig": "https://github.com/sak32009/tsconfig.git#commit=8d4c33cc0487e4c69d63a52513856640b75e1f38",
     "@types/adm-zip": "^0.5.0",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^16.11.47",
     "@types/yargs": "^17.0.11",
     "cross-env": "^7.0.3",
     "eslint": "^8.21.0",
-    "eslint-config-sak32009": "Sak32009/eslint-config-sak32009",
+    "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=405d74c7544acff6a05da0185f7498f10a62b2db",
     "pkg": "^5.8.0",
     "pkg-fetch": "^3.4.2",
     "prettier": "^2.7.1",
