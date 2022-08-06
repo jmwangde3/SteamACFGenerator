@@ -46,7 +46,7 @@
     "@types/yargs": "^17.0.11",
     "cross-env": "^7.0.3",
     "eslint": "^8.21.0",
-    "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=405d74c7544acff6a05da0185f7498f10a62b2db",
+    "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=bd13ecbc0f7a34790464e079639d413a6dbd711f",
     "pkg": "^5.8.0",
     "pkg-fetch": "^3.4.2",
     "prettier": "^2.7.1",
