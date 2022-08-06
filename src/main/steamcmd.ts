@@ -1,142 +1,153 @@
-import { spawnSync } from 'node:child_process';
-import { join, dirname } from 'node:path';
-import { parse as vdfParse } from 'vdf-parser';
-import fsExtra from 'fs-extra';
-import axios from 'axios';
-import AdmZip from 'adm-zip';
-import logger from '../common/logger';
+import { spawnSync } from 'node:child_process'
+import { dirname, join } from 'node:path'
+import AdmZip from 'adm-zip'
+import axios from 'axios'
+import fsExtra from 'fs-extra'
+import { parse as vdfParse } from 'vdf-parser'
+import logger from '../common/logger'
 import {
   appSteamAppsRootPath,
   appSteamCMDDownloadsRootPath,
   appSteamCMDExeFilePath,
-  appSteamCMDInstalledRootPath,
-} from '../common/paths';
-import { isNumeric, acfGenerator } from './acf/acf-generator';
+  appSteamCMDInstalledRootPath
+} from '../common/paths'
+import { acfGenerator, isNumeric } from './acf/acf-generator'
 
 class SteamCMD {
-  private downloadLink = 'https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip';
+  private readonly downloadLink = 'https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip'
 
-  private decompress = (zipPath: string, decompressTo: string) => {
-    new AdmZip(zipPath).extractAllTo(decompressTo, true);
-  };
+  private readonly decompress = (zipPath: string, decompressTo: string) => {
+    const zip = new AdmZip(zipPath)
+    zip.extractAllTo(decompressTo, true)
+    logger.info(`${zipPath} was decompressed successfully!`)
+  }
 
-  private downloadFile = async (url: string, saveTo: string) => {
+  private readonly downloadFile = async (url: string, saveTo: string) => {
     const response = await axios.get(url, {
-      responseType: 'arraybuffer',
-    });
-    const data = response.data as Buffer;
-    await fsExtra.ensureDir(dirname(saveTo));
-    return fsExtra.writeFile(saveTo, data);
-  };
+      responseType: 'arraybuffer'
+    })
+    const data = response.data as Buffer
+    await fsExtra.ensureDir(dirname(saveTo))
+    await fsExtra.writeFile(saveTo, data)
+    logger.info(`${url} was downloaded successfully!`)
+  }
 
-  private downloadCMD = async () => {
-    const dLinkSpl = this.downloadLink.split('/');
-    const cmpName = dLinkSpl[dLinkSpl.length - 1];
-    const cmpFilePath = join(appSteamCMDDownloadsRootPath, cmpName);
+  private readonly downloadCMD = async () => {
+    const dLinkSpl = this.downloadLink.split('/')
+    const cmpName = dLinkSpl[dLinkSpl.length - 1]
+    const cmpFilePath = join(appSteamCMDDownloadsRootPath, cmpName)
     if (!(await fsExtra.pathExists(appSteamCMDExeFilePath))) {
-      logger.info('Download latest SteamCMD.exe...');
-      await this.downloadFile(this.downloadLink, cmpFilePath);
-      logger.info('Unzip SteamCMD.exe...');
-      this.decompress(cmpFilePath, appSteamCMDInstalledRootPath);
+      logger.info('Download latest version of SteamCMD...')
+      await this.downloadFile(this.downloadLink, cmpFilePath)
+      logger.info(`Decompress zip to ${appSteamCMDInstalledRootPath}...`)
+      this.decompress(cmpFilePath, appSteamCMDInstalledRootPath)
+    } else {
+      logger.info(`Skip SteamCMD download, installation found: ${appSteamCMDExeFilePath}`)
     }
-  };
+  }
 
-  private parseStdout = (stdout: string) => {
-    let b = '';
-    let k: SteamCMDApi = {};
-    let reg = false;
+  private readonly parseStdout = (stdout: string) => {
+    let a = ''
+    let b: SteamCMDApi = {}
+    let c = false
 
-    for (const a of stdout.split('\n')) {
-      const l = a;
-      if (l.startsWith('"')) {
-        reg = true;
+    for (const d of stdout.split('\n')) {
+      const e = d
+
+      if (e.startsWith('"')) {
+        c = true
       }
 
-      if (l.startsWith('}')) {
-        reg = false;
-        b += '}';
+      if (e.startsWith('}')) {
+        c = false
+        a += '}'
       }
 
-      if (reg) {
-        b += `${l}\n`;
-      } else if (b.length > 0) {
-        const par = vdfParse(b);
-        k = { ...k, ...par };
-        b = '';
+      if (c) {
+        a += `${e}\n`
+      } else if (a.length > 0) {
+        b = {
+          ...b,
+          ...vdfParse(a)
+        }
+        a = ''
       }
     }
 
-    return Object.keys(k).length > 0 ? k : stdout;
-  };
+    return Object.keys(b).length > 0 ? b : stdout
+  }
 
   public execRaw = async (commands: string[]) => {
-    await this.downloadCMD();
-
     return spawnSync(
       appSteamCMDExeFilePath,
       ['@ShutdownOnFailedCommand', '1', '@NoPromptForPassword', '1', '+login', 'anonymous', ...commands, '+quit'],
       {
         cwd: appSteamCMDInstalledRootPath,
-        encoding: 'utf8',
+        encoding: 'utf8'
       }
-    );
-  };
+    )
+  }
 
   public appsInfo = async (appIds: string[]) => {
-    const appInfoPrint = [];
-    for (const appId of appIds) {
-      if (isNumeric(appId)) {
-        appInfoPrint.push('+app_info_print', appId);
-      } else {
-        throw new Error(`The appId "${appId}" is invalid!`);
-      }
-    }
+    if (appIds.length > 0) {
+      logger.info('!DO NOT PANIC IF IT LOOKS STUCK!')
 
-    if (appInfoPrint.length > 0) {
-      logger.info('... DO NOT PANIC IF IT LOOKS STUCK!');
+      const appInfoPrint = []
+      for (const appId of appIds) {
+        if (isNumeric(appId)) {
+          appInfoPrint.push('+app_info_print', appId)
+        } else {
+          throw new Error(`The appId "${appId}" is invalid!`)
+        }
+      }
+
+      // DOWNLOAD CMD
+      await this.downloadCMD()
 
       // CLEANUP
-      await fsExtra.remove(join(appSteamCMDInstalledRootPath, 'appcache'));
+      logger.info('Remove junk and cache from SteamCMD...')
+
+      await fsExtra.remove(join(appSteamCMDInstalledRootPath, 'appcache'))
       // await fsExtra.remove(path.join(appSteamCMDInstalledRootPath, 'config'));
       // await fsExtra.remove(path.join(appSteamCMDInstalledRootPath, 'dumps'));
       // await fsExtra.remove(path.join(appSteamCMDInstalledRootPath, 'logs'));
       // await fsExtra.remove(path.join(appSteamCMDInstalledRootPath, 'steamapps'));
       // await fsExtra.remove(path.join(appSteamCMDInstalledRootPath, '4'));
 
+      logger.info('I run preCommand to prevent issues with SteamCMD...')
       // The first call to app_info_print from a new install will return nothing,
       // and it will instead prep an entry for the info and request it.
       // It won't block though, and if the session closes before it can save,
       // the same issue will be present on next run.
       // Thus we use `app_update` to force the session to wait long enough to save.
-      const preCommand = [...appInfoPrint, '+force_install_dir', './4', '+app_update', '4'];
-      await this.execRaw(preCommand);
+      const preCommand = [...appInfoPrint, '+force_install_dir', './4', '+app_update', '4']
+      await this.execRaw(preCommand)
 
       // The output from app_update can collide with that of app_info_print,
       // so after ensuring the info is available we must re-run without app_update.
-      logger.info(`Trying to get data of "${appIds.join(', ')}"...`);
+      logger.info(`Trying to get data of "${appIds.join(', ')}"...`)
 
-      const command = ['+app_info_update', '1', ...appInfoPrint];
-      const data = await this.execRaw(command);
-      const stdout = data.stdout;
+      const command = ['+app_info_update', '1', ...appInfoPrint]
+      const data = await this.execRaw(command)
 
-      const outputAppIdsData = this.parseStdout(stdout);
+      const outputAppIdsData = this.parseStdout(data.stdout)
       if (typeof outputAppIdsData === 'object') {
         for (const outputAppId in outputAppIdsData) {
-          if (Object.hasOwn(outputAppIdsData, outputAppId)) {
-            const manifest = join(appSteamAppsRootPath, `appmanifest_${outputAppId}.acf`);
-            const output = acfGenerator(Number(outputAppId), outputAppIdsData);
-            await fsExtra.outputFile(manifest, output);
-            logger.info(`${manifest} was written successfully!`);
-          }
+          const manifest = join(appSteamAppsRootPath, `appmanifest_${outputAppId}.acf`)
+          const output = acfGenerator(Number(outputAppId), outputAppIdsData)
+          await fsExtra.outputFile(manifest, output)
+          logger.info(`${manifest} was written successfully!`)
         }
       } else {
-        logger.error(`Unknown error from SteamCMD!`);
-        logger.error(outputAppIdsData);
+        logger.error('Unknown error from SteamCMD:')
+        logger.error(outputAppIdsData)
       }
+    } else {
+      logger.error('You have not entered any appId!')
     }
-  };
+  }
 
-  public appInfo = async (appId: string) => this.appsInfo([appId]);
+  public appInfo = async (appId: string) => await this.appsInfo([appId])
 }
 
-export default SteamCMD;
+export default SteamCMD

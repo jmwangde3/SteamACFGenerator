@@ -1,33 +1,33 @@
-/* eslint-disable unicorn/prevent-abbreviations */
-import { basename, dirname } from 'node:path';
-import { exec as pkgExec } from 'pkg';
-import { need as pkgNeed } from 'pkg-fetch';
-import fsExtra from 'fs-extra';
-import rcedit from 'rcedit';
-import AdmZip from 'adm-zip';
-import logger from '../common/logger.js';
+import { basename, dirname } from 'node:path'
+import AdmZip from 'adm-zip'
+import fsExtra from 'fs-extra'
+import { exec as pkgExec } from 'pkg'
+import { need as pkgNeed } from 'pkg-fetch'
+import rcedit from 'rcedit'
+import appInfo from '../../package.json'
+import logger from '../common/logger'
 import {
   appIconFilePath,
+  appReleaseFilePath,
+  appReleaseRootPath,
   pkgCustomizedPrecompiledBinariesFilePath,
+  pkgInputFilePath,
   pkgNodeVersion,
   pkgOriginalPrecompiledBinariesFilePath,
-  pkgInputFilePath,
-  pkgOutputFilePath,
-  appReleaseRootPath,
-  appReleaseFilePath,
-} from '../common/paths.js';
-import appInfo from '../../package.json';
+  pkgOutputFilePath
+} from '../common/paths'
 
 const downloadPkgOriginalPrecompiledBinaries = async () => {
-  logger.info('Download PKG Precompiled Binaries');
   if (!(await fsExtra.pathExists(pkgCustomizedPrecompiledBinariesFilePath))) {
-    await pkgNeed({ nodeRange: `node${pkgNodeVersion}`, platform: 'win', arch: 'x64' });
-    await fsExtra.rename(pkgOriginalPrecompiledBinariesFilePath, pkgCustomizedPrecompiledBinariesFilePath);
+    logger.info('Download PKG Original Precompiled Binaries...')
+    await pkgNeed({ nodeRange: `node${pkgNodeVersion}`, platform: 'win', arch: 'x64' })
+    await fsExtra.rename(pkgOriginalPrecompiledBinariesFilePath, pkgCustomizedPrecompiledBinariesFilePath)
+    logger.info('...DONE')
   }
-};
+}
 
-const customizePkgInfoPrecompiledBinaries = async () => {
-  logger.info('Customize PKG Info & Icon Precompiled Binaries');
+const customizePkgResourcesPrecompiledBinaries = async () => {
+  logger.info('Customize PKG Resources Precompiled Binaries...')
   await rcedit(pkgCustomizedPrecompiledBinariesFilePath, {
     icon: appIconFilePath,
     'file-version': appInfo.version,
@@ -38,29 +38,29 @@ const customizePkgInfoPrecompiledBinaries = async () => {
       InternalFilename: basename(pkgOutputFilePath),
       OriginalFilename: basename(pkgOutputFilePath),
       LegalCopyright: appInfo.copyright,
-      ProductName: appInfo.name,
-    },
-  });
-};
+      ProductName: appInfo.name
+    }
+  })
+  logger.info('...DONE')
+}
 
-const buildCustomizedExecutables = async () => {
-  await fsExtra.emptyDir(dirname(pkgOutputFilePath));
-  await pkgExec([pkgInputFilePath, '-C', 'Brotli', '-t', 'win', '-d', '-o', pkgOutputFilePath]);
-};
+const buildCustomizedExecutable = async () => {
+  logger.info('Build Customized Executable...')
+  await fsExtra.emptyDir(dirname(pkgOutputFilePath))
+  await pkgExec([pkgInputFilePath, '-C', 'Brotli', '-t', 'win', '-o', pkgOutputFilePath])
+  logger.info('...DONE')
+}
 
-const zipFiles = () => {
-  logger.info('Create Release ZIP File');
-  const zip = new AdmZip();
-  zip.addLocalFolder(appReleaseRootPath);
-  zip.writeZip(appReleaseFilePath);
-};
+const createZipCustomizedExecutable = () => {
+  logger.info('Create ZIP Customized Executable...')
+  const zip = new AdmZip()
+  zip.addLocalFolder(appReleaseRootPath)
+  zip.writeZip(appReleaseFilePath)
+  logger.info('...DONE')
+}
 
 downloadPkgOriginalPrecompiledBinaries()
-  .then(customizePkgInfoPrecompiledBinaries)
-  .then(buildCustomizedExecutables)
-  .then(zipFiles)
-  .then(() => {
-    logger.info('Done');
-  })
-  // eslint-disable-next-line unicorn/prefer-top-level-await
-  .catch((error) => logger.error(error));
+  .then(customizePkgResourcesPrecompiledBinaries)
+  .then(buildCustomizedExecutable)
+  .then(createZipCustomizedExecutable)
+  .catch((error) => logger.error(error))

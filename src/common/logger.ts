@@ -1,39 +1,34 @@
-import path from 'node:path';
-import util from 'node:util';
-import * as winston from 'winston';
-import appInfo from '../../package.json';
-import { appLoggerRootPath } from './paths';
+import path from 'node:path'
+import util from 'node:util'
+import * as winston from 'winston'
+import appInfo from '../../package.json'
+import { appLoggerRootPath } from './paths'
 
-const loggerFilePath = path.join(appLoggerRootPath, `${appInfo.name}.log`);
-const loggerFormatString = winston.format.printf(
+const loggerFilePath = path.join(appLoggerRootPath, `${appInfo.name}.log`)
+const loggerFormat = winston.format.printf(
   ({ level, timestamp, message }) => `[${timestamp as string}] [${level}]: ${message as string}`
-);
-const loggerFormatTimestamp = 'YYYY-MM-DD hh:mm:ss.SSS';
-const logger = winston.createLogger({
+)
+const loggerFormatTimestamp = winston.format.timestamp({ format: 'YYYY-MM-DD hh:mm:ss.SSS' })
+const loggerInstance = winston.createLogger({
   level: 'silly',
-  format: winston.format.combine(winston.format.timestamp({ format: loggerFormatTimestamp }), loggerFormatString),
   transports: [
     new winston.transports.File({
       filename: loggerFilePath,
       maxFiles: 5,
       maxsize: 5_242_880,
       tailable: true,
-      format: winston.format.combine(winston.format.timestamp({ format: loggerFormatTimestamp }), loggerFormatString),
+      format: winston.format.combine(loggerFormatTimestamp, loggerFormat)
     }),
     new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.timestamp({ format: loggerFormatTimestamp }),
-        loggerFormatString
-      ),
-    }),
-  ],
-});
+      format: winston.format.combine(winston.format.colorize(), loggerFormatTimestamp, loggerFormat)
+    })
+  ]
+})
 
-const c = {
-  info: (...data: unknown[]) => logger.info(util.format(...data)),
-  debug: (...data: unknown[]) => logger.debug(util.format(...data)),
-  error: (...data: unknown[]) => logger.debug(util.format(...data)),
-};
+const logger = {
+  info: (...data: unknown[]) => loggerInstance.info(util.format(...data)),
+  debug: (...data: unknown[]) => loggerInstance.debug(util.format(...data)),
+  error: (...data: unknown[]) => loggerInstance.debug(util.format(...data))
+}
 
-export default c;
+export default logger
