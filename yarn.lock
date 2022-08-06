@@ -504,20 +504,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sak32009/prettierconfig@https://github.com/sak32009/prettierconfig.git#commit=cac596834ecf7424048b0a0e620ba5ac19cf6da3":
-  version: 1.0.2
-  resolution: "@sak32009/prettierconfig@https://github.com/sak32009/prettierconfig.git#commit=cac596834ecf7424048b0a0e620ba5ac19cf6da3"
-  checksum: 29fc5a92372e1fdeb97799fbd4da866ead144e41747bb706846678795d2f7152f6c2b4a123a0f1ee21c3c98b60ce941f55a4e5f6e1d967b084462ae93c4ff922
-  languageName: node
-  linkType: hard
-
-"@sak32009/tsconfig@https://github.com/sak32009/tsconfig.git#commit=8d4c33cc0487e4c69d63a52513856640b75e1f38":
-  version: 1.0.2
-  resolution: "@sak32009/tsconfig@https://github.com/sak32009/tsconfig.git#commit=8d4c33cc0487e4c69d63a52513856640b75e1f38"
-  checksum: 20391e94d322c31042ec2328ecb2644ab856af97f5e3363617d27870ea38ef9670556384e06e81cf261b257e76bd9c02faeeae5f2b6b111732063b75058b1d24
-  languageName: node
-  linkType: hard
-
 "@tootallnate/once@npm:2":
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
@@ -4315,8 +4301,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "steam-acf-generator@workspace:."
   dependencies:
-    "@sak32009/prettierconfig": "https://github.com/sak32009/prettierconfig.git#commit=cac596834ecf7424048b0a0e620ba5ac19cf6da3"
-    "@sak32009/tsconfig": "https://github.com/sak32009/tsconfig.git#commit=8d4c33cc0487e4c69d63a52513856640b75e1f38"
     "@types/adm-zip": ^0.5.0
     "@types/fs-extra": ^9.0.13
     "@types/node": ^16.11.47
