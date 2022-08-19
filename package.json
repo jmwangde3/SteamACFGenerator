@@ -1,6 +1,6 @@
 {
   "name": "steam-acf-generator",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Steam .acf Generator is a CLI application for Windows that can generate the appmanifest_APPID.acf for Steam Games.",
   "homepage": "https://github.com/Sak32009/SteamACFGenerator/",
   "bugs": "https://github.com/Sak32009/SteamACFGenerator/issues/",
@@ -42,16 +42,16 @@
   "devDependencies": {
     "@types/adm-zip": "^0.5.0",
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^16.11.47",
+    "@types/node": "^16.11.49",
     "@types/yargs": "^17.0.11",
     "cross-env": "^7.0.3",
-    "eslint": "^8.21.0",
-    "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=bd13ecbc0f7a34790464e079639d413a6dbd711f",
+    "eslint": "^8.22.0",
+    "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=7252a775add9d89c7338ecff602cb763d2c061a8",
     "pkg": "^5.8.0",
     "pkg-fetch": "^3.4.2",
     "prettier": "^2.7.1",
     "rcedit": "^3.0.1",
     "typescript": "^4.7.4",
-    "vite": "^3.0.4"
+    "vite": "^3.0.9"
   }
 }

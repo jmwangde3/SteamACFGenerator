@@ -1,9 +1,9 @@
-import { argv } from 'node:process'
-import { hideBin } from 'yargs/helpers'
-import yargs from 'yargs/yargs'
-import { version } from '../../package.json'
-import logger from '../common/logger'
-import SteamCMD from './steamcmd'
+import { argv } from 'node:process';
+import { hideBin } from 'yargs/helpers';
+import yargs from 'yargs/yargs';
+import { version } from '../../package.json';
+import logger from '../common/logger';
+import SteamCMD from './steamcmd';
 
 yargs(hideBin(argv))
   .strict()
@@ -15,11 +15,12 @@ yargs(hideBin(argv))
     array: true,
     string: true,
     describe: 'You can set a single appId or multiple appIds',
-    demandOption: true
+    demandOption: true,
   })
   .parseAsync()
-  .then(async ({ appids: appIds }) => {
-    const steamcmd = new SteamCMD()
-    await steamcmd.appsInfo(appIds)
+  .then(({ appids: appIds }) => {
+    const steamcmd = new SteamCMD();
+    return steamcmd.appsInfo(appIds);
   })
-  .catch((error) => logger.error(error))
+  // eslint-disable-next-line unicorn/prefer-top-level-await
+  .catch((error) => logger.error(error));
