@@ -11,7 +11,7 @@
   "bin": "./src/main.js",
   "repository": "github:Sak32009/SteamACFGenerator",
   "scripts": {
-    "test": "yarn run build-dev:main && node ./build/dist/main.js --appids 227300 1091500 203160 252490 271590 1120320 954740 530070 215280",
+    "test": "yarn run build-dev:main && node ./build/dist/main.js --appids 227300 1091500 203160 252490 271590 1120320 954740 530070 215280 354200",
     "build": "yarn run build:build && yarn run build:main && yarn cross-env PKG_CACHE_PATH=./build/.pkg-cache PKG_IGNORE_TAG=true node ./build/dist/build.js",
     "build-dev": "yarn run build-dev:build && yarn run build-dev:main && yarn cross-env PKG_CACHE_PATH=./build/.pkg-cache PKG_IGNORE_TAG=true node ./build/dist/build.js",
     "lint": "yarn tsc --noEmit && yarn eslint .",
@@ -20,7 +20,7 @@
     "build-dev:build": "yarn vite build --mode development -c ./src/build/vite.config.ts",
     "build-dev:main": "yarn vite build --mode development -c ./src/main/vite.config.ts"
   },
-  "packageManager": "yarn@3.2.2",
+  "packageManager": "yarn@3.2.4",
   "engines": {
     "node": "v16.16.0"
   },
@@ -33,25 +33,25 @@
   "private": true,
   "dependencies": {
     "adm-zip": "^0.5.9",
-    "axios": "^0.27.2",
+    "axios": "^1.1.3",
     "fs-extra": "^10.1.0",
     "vdf-parser": "^1.2.0",
-    "winston": "^3.8.1",
-    "yargs": "^17.5.1"
+    "winston": "^3.8.2",
+    "yargs": "^17.6.2"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.0",
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^16.11.49",
-    "@types/yargs": "^17.0.11",
+    "@types/node": "^16.18.3",
+    "@types/yargs": "^17.0.13",
     "cross-env": "^7.0.3",
-    "eslint": "^8.22.0",
-    "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=7252a775add9d89c7338ecff602cb763d2c061a8",
+    "eslint": "^8.27.0",
+    "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=bed84abbf73763ec9a3d15fa8112a3508a200373",
     "pkg": "^5.8.0",
     "pkg-fetch": "^3.4.2",
     "prettier": "^2.7.1",
     "rcedit": "^3.0.1",
-    "typescript": "^4.7.4",
-    "vite": "^3.0.9"
+    "typescript": "^4.8.4",
+    "vite": "^3.2.3"
   }
 }

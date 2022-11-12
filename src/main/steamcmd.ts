@@ -69,7 +69,7 @@ class SteamCMD {
       } else if (a.length > 0) {
         b = {
           ...b,
-          ...vdfParse(a),
+          ...vdfParse(a, { types: false, arrayify: true }),
         };
         a = '';
       }
