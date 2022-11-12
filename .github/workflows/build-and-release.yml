@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - name: Action / Checkout
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v3.1.0
 
       - name: Action / Setup Node v16
-        uses: actions/setup-node@v3.4.1
+        uses: actions/setup-node@v3.5.1
         with:
           node-version: 16
 
@@ -33,7 +33,7 @@ jobs:
           yarn run build
 
       - name: Action / Release
-        uses: ncipollo/release-action@v1.10.0
+        uses: ncipollo/release-action@v1.11.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
