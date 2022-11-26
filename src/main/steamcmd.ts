@@ -1,8 +1,9 @@
 /* eslint-disable sonarjs/cognitive-complexity */
+import { Buffer } from 'node:buffer';
 import { spawnSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import AdmZip from 'adm-zip';
-import axios from 'axios';
+import fetch from 'cross-fetch';
 import fsExtra from 'fs-extra';
 import { parse as vdfParse } from 'vdf-parser';
 import logger from '../common/logger';
@@ -24,12 +25,10 @@ class SteamCMD {
   };
 
   private readonly downloadFile = async (url: string, saveTo: string) => {
-    const response = await axios.get(url, {
-      responseType: 'arraybuffer',
-    });
-    const data = response.data as Buffer;
+    const response = await fetch(url);
+    const data = await response.arrayBuffer();
     await fsExtra.ensureDir(dirname(saveTo));
-    await fsExtra.writeFile(saveTo, data);
+    await fsExtra.writeFile(saveTo, Buffer.from(data));
     logger.info(`${url} was downloaded successfully!`);
   };
 
@@ -37,13 +36,13 @@ class SteamCMD {
     const dLinkSpl = this.downloadLink.split('/');
     const cmpName = dLinkSpl[dLinkSpl.length - 1];
     const cmpFilePath = join(appSteamCMDDownloadsRootPath, cmpName);
-    if (!(await fsExtra.pathExists(appSteamCMDExeFilePath))) {
+    if (await fsExtra.pathExists(appSteamCMDExeFilePath)) {
+      logger.info(`Skip SteamCMD download, installation found: ${appSteamCMDExeFilePath}`);
+    } else {
       logger.info('Download latest version of SteamCMD...');
       await this.downloadFile(this.downloadLink, cmpFilePath);
       logger.info(`Decompress zip to ${appSteamCMDInstalledRootPath}...`);
       this.decompress(cmpFilePath, appSteamCMDInstalledRootPath);
-    } else {
-      logger.info(`Skip SteamCMD download, installation found: ${appSteamCMDExeFilePath}`);
     }
   };
 

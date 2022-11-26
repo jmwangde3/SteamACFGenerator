@@ -2,7 +2,7 @@ import { join } from 'node:path';
 import process from 'node:process';
 import { engines, name } from '../../package.json';
 
-const appIsPackaged = typeof (process as unknown as Record<string, unknown>).pkg !== 'undefined';
+const appIsPackaged = (process as unknown as Record<string, unknown>).pkg !== undefined;
 
 export const appRootPath = process.cwd();
 export const appIconFilePath = join(appRootPath, 'build', 'resources', 'icon.ico');
@@ -23,7 +23,7 @@ export const appSteamCMDExeFilePath = join(appSteamCMDInstalledRootPath, 'steamc
 export const appSteamCMDDownloadsRootPath = join(appSteamCMDRootPath, 'downloads');
 
 export const pkgCacheRootPath = join(appRootPath, 'build', '.pkg-cache');
-export const pkgInputFilePath = join(appRootPath, 'build', 'dist', 'main.js');
+export const pkgInputFilePath = join(appRootPath, 'build', 'dist', 'main.cjs');
 export const pkgOutputFilePath = join(appReleaseRootPath, `${name}.exe`);
 export const pkgNodeVersion = engines.node.slice(1);
 export const pkgOriginalPrecompiledBinariesFilePath = join(pkgCacheRootPath, `fetched-v${pkgNodeVersion}-win-x64`);

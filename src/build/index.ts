@@ -47,7 +47,7 @@ const customizePkgResourcesPrecompiledBinaries = async () => {
 const buildCustomizedExecutable = async () => {
   logger.info('Build Customized Executable...');
   await fsExtra.emptyDir(dirname(pkgOutputFilePath));
-  await pkgExec([pkgInputFilePath, '-C', 'Brotli', '-t', 'win', '-o', pkgOutputFilePath]);
+  await pkgExec([pkgInputFilePath, '-d', '-C', 'Brotli', '-t', 'win', '-o', pkgOutputFilePath]);
   logger.info('...DONE');
 };
 

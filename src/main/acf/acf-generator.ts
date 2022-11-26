@@ -4,7 +4,7 @@
  * https://github.com/Sak32009/GetDLCInfoFromSteamDB
  * AND
  * https://github.com/Sak32009/SteamACFGenerator
- * VERSION: 1.0.4
+ * VERSION: 1.0.5
  */
 import { stringify as vdfStringify } from 'vdf-parser';
 import acfConsole from './acf-console';
@@ -32,15 +32,12 @@ export const acfGenerator = (appId: number, steamCMDData: SteamCMDApi) => {
       if (isNumeric(depotId)) {
         const depotData = appDataDepots[depotId];
         const depotName = depotData.name;
-        const depotSize = typeof depotData.maxsize !== 'undefined' ? depotData.maxsize : 0;
-        const depotManifestId = typeof depotData.manifests !== 'undefined' ? depotData.manifests.public : undefined;
+        const depotSize = depotData.maxsize === undefined ? 0 : depotData.maxsize;
+        const depotManifestId = depotData.manifests === undefined ? undefined : depotData.manifests.public;
         const depotOs =
-          typeof depotData.config !== 'undefined' && typeof depotData.config.oslist !== 'undefined'
-            ? depotData.config.oslist
-            : undefined;
-        const depotIsDlc = typeof depotData.dlcappid !== 'undefined' ? depotData.dlcappid : undefined;
-        const depotIsSharedInstall =
-          typeof depotData.sharedinstall !== 'undefined' ? depotData.depotfromapp : undefined;
+          depotData.config !== undefined && depotData.config.oslist !== undefined ? depotData.config.oslist : undefined;
+        const depotIsDlc = depotData.dlcappid === undefined ? undefined : depotData.dlcappid;
+        const depotIsSharedInstall = depotData.sharedinstall === undefined ? undefined : depotData.depotfromapp;
 
         acfConsole.debug(`-------------------------- depotId ${depotId}`);
         acfConsole.debug('depotName', depotName);
@@ -51,10 +48,12 @@ export const acfGenerator = (appId: number, steamCMDData: SteamCMDApi) => {
         acfConsole.debug('depotIsSharedInstall', depotIsSharedInstall);
 
         // ONLY WINDOWS
-        if (typeof depotOs === 'undefined' || depotOs === 'windows') {
-          if (typeof depotIsSharedInstall !== 'undefined') {
+        if (depotOs === undefined || depotOs === 'windows') {
+          if (depotIsSharedInstall !== undefined) {
             appSharedDepots[depotId] = depotIsSharedInstall;
-          } else if (typeof depotManifestId !== 'undefined') {
+          } else if (depotManifestId === undefined) {
+            acfConsole.info(`${depotId} it is an unused depot.`);
+          } else {
             // NOTE: first depot contains the game size
             if (appSize === 0) {
               appSize = depotSize;
@@ -62,18 +61,16 @@ export const acfGenerator = (appId: number, steamCMDData: SteamCMDApi) => {
             }
 
             appInstalledDepots[depotId] =
-              typeof depotIsDlc !== 'undefined'
+              depotIsDlc === undefined
                 ? {
                     manifest: depotManifestId,
                     size: depotSize,
-                    dlcappid: depotIsDlc,
                   }
                 : {
                     manifest: depotManifestId,
                     size: depotSize,
+                    dlcappid: depotIsDlc,
                   };
-          } else {
-            acfConsole.info(`${depotId} it is an unused depot.`);
           }
         } else {
           acfConsole.info(`${depotId} it is not a valid depot for Windows OS.`);
