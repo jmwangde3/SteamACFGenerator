@@ -651,12 +651,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^17.0.14":
-  version: 17.0.14
-  resolution: "@types/yargs@npm:17.0.14"
+"@types/yargs@npm:^17.0.17":
+  version: 17.0.17
+  resolution: "@types/yargs@npm:17.0.17"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 7c571560434e1295b31dfd7f8d3b4a88dbb8bfe8db0054cea35f829f86b1251f67e41eaa0cb5990f17e5ed9b1a508c686b2b9f15c3bafc467ba58989ac9223e8
+  checksum: 4f1b5149e794c8960652b4339dc96655e53b48fdbe1b847fcb0db95e72e760724a4c5c616a7fccb3c0ae8beb0e57e06e37391d492e916e3ff179aafeb890e426
   languageName: node
   linkType: hard
 
@@ -4734,7 +4734,7 @@ __metadata:
     "@types/adm-zip": ^0.5.0
     "@types/fs-extra": ^9.0.13
     "@types/node": ^18.11.9
-    "@types/yargs": ^17.0.14
+    "@types/yargs": ^17.0.17
     adm-zip: ^0.5.9
     cross-env: ^7.0.3
     cross-fetch: ^3.1.5

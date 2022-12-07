@@ -44,7 +44,7 @@
     "@types/adm-zip": "^0.5.0",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^18.11.9",
-    "@types/yargs": "^17.0.14",
+    "@types/yargs": "^17.0.17",
     "cross-env": "^7.0.3",
     "eslint": "^8.28.0",
     "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=7ca2518a52c606e74eadba6c89bdfd49011f9d54",
