@@ -50,7 +50,7 @@
     "eslint-config-sak32009": "https://github.com/Sak32009/eslint-config-sak32009.git#commit=7ca2518a52c606e74eadba6c89bdfd49011f9d54",
     "pkg": "^5.8.0",
     "pkg-fetch": "^3.4.2",
-    "prettier": "^2.8.0",
+    "prettier": "^2.8.1",
     "rcedit": "^3.0.1",
     "typescript": "^4.9.3",
     "vite": "^3.2.4"
