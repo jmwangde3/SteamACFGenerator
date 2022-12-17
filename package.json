@@ -23,7 +23,7 @@
   },
   "packageManager": "yarn@3.3.0",
   "engines": {
-    "node": "v18.5.0"
+    "node": "18.12.1"
   },
   "os": [
     "win32"
@@ -43,7 +43,7 @@
   "devDependencies": {
     "@types/adm-zip": "^0.5.0",
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^18.11.9",
+    "@types/node": "^18.11.17",
     "@types/yargs": "^17.0.14",
     "cross-env": "^7.0.3",
     "eslint": "^8.28.0",
