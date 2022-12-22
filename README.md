@@ -12,4 +12,4 @@ This is for issues only.
 
 ## License
 
-> **_Steam .acf Generator_** is released under the following license: [MIT](https://github.com/Sak32009/SteamACFGenerator/blob/main/LICENSE)
+> **_SteamACFGenerator_** is released under the following license: [MIT](https://github.com/Sak32009/SteamACFGenerator/blob/main/LICENSE)
